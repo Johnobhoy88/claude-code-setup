@@ -1,0 +1,43 @@
+{
+  "name": "GitHub",
+  "description": "GitHub repository management and code collaboration",
+  "mcp": "@modelcontextprotocol/server-github",
+  "required_env": [
+    "GITHUB_TOKEN"
+  ],
+  "oauth_flow": true,
+  "oauth_url": "https://github.com/settings/tokens",
+  "skills": [
+    "git-automation",
+    "code-review"
+  ],
+  "use_cases": [
+    "version control",
+    "code management",
+    "collaboration",
+    "ci/cd"
+  ],
+  "setup_instructions": [
+    "Go to https://github.com/settings/tokens",
+    "Click 'Generate new token (classic)'",
+    "Select scopes: repo, workflow, read:org",
+    "Copy the token and add to .env file"
+  ],
+  "config_example": {
+    "command": "@modelcontextprotocol/server-github",
+    "args": [],
+    "env": {
+      "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+    }
+  },
+  "keywords": [
+    "github",
+    "git",
+    "version control",
+    "code",
+    "repository",
+    "pull request",
+    "issues"
+  ],
+  "popularity_score": 950
+}

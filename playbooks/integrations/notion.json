@@ -1,0 +1,44 @@
+{
+  "name": "Notion",
+  "description": "Notion workspace integration for content management",
+  "mcp": "@notionhq/notion-mcp-server",
+  "required_env": [
+    "NOTION_API_KEY"
+  ],
+  "oauth_flow": true,
+  "oauth_url": "https://www.notion.so/my-integrations",
+  "skills": [
+    "notion-integration",
+    "content-management"
+  ],
+  "use_cases": [
+    "cms",
+    "documentation",
+    "database",
+    "knowledge base",
+    "project management"
+  ],
+  "setup_instructions": [
+    "Go to https://www.notion.so/my-integrations",
+    "Click 'New integration'",
+    "Name it and select workspace",
+    "Copy the 'Internal Integration Token'",
+    "Share your Notion pages with the integration"
+  ],
+  "config_example": {
+    "command": "@notionhq/notion-mcp-server",
+    "args": [],
+    "env": {
+      "NOTION_API_KEY": "${NOTION_API_KEY}"
+    }
+  },
+  "keywords": [
+    "notion",
+    "cms",
+    "content",
+    "database",
+    "wiki",
+    "documentation"
+  ],
+  "popularity_score": 800
+}

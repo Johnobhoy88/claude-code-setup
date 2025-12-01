@@ -1,0 +1,16 @@
+# Build
+dist/
+.aws-sam/
+
+# Environment
+.env
+.env.local
+
+# Node
+node_modules/
+
+# AWS
+samconfig.toml
+
+# Misc
+*.log

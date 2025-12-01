@@ -1,0 +1,18 @@
+# Build output
+dist/
+*.js.map
+
+# Environment
+.env
+.env.local
+
+# Node
+node_modules/
+
+# Test
+coverage/
+.nyc_output/
+
+# Misc
+.DS_Store
+*.log

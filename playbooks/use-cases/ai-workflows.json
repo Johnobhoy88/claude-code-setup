@@ -1,0 +1,40 @@
+{
+  "name": "AI Agent Workflows",
+  "description": "Complex AI agent orchestration and automation",
+  "required_mcps": [
+    "@modelcontextprotocol/server-memory",
+    "sequential-thinking-mcp"
+  ],
+  "optional_mcps": [
+    "orchestr8-mcp",
+    "langchain-mcp",
+    "ollama-mcp"
+  ],
+  "skills": [
+    "workflow-orchestration",
+    "agent-specialist",
+    "task-automation"
+  ],
+  "instructions": [
+    "Use memory MCP for context persistence across sessions",
+    "Break complex tasks into smaller, manageable steps",
+    "Implement proper error handling and recovery",
+    "Plan workflows before executing them",
+    "Log agent decisions for debugging",
+    "Use sequential-thinking for multi-step reasoning"
+  ],
+  "keywords": [
+    "agent",
+    "workflow",
+    "automation",
+    "orchestration",
+    "ai assistant",
+    "autonomous",
+    "multi-step"
+  ],
+  "tech_stack": {
+    "orchestration": "LangChain, AutoGPT, or custom",
+    "memory": "Redis, PostgreSQL, or file-based",
+    "llm": "Claude, GPT-4, or local models"
+  }
+}

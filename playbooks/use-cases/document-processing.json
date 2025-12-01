@@ -1,0 +1,39 @@
+{
+  "name": "Document Processing / RAG",
+  "description": "Document analysis and retrieval augmented generation",
+  "required_mcps": [
+    "@modelcontextprotocol/server-filesystem",
+    "sequential-thinking-mcp"
+  ],
+  "optional_mcps": [
+    "rag-engine-mcp",
+    "pdf-parser-mcp",
+    "ollama-mcp"
+  ],
+  "skills": [
+    "document-processor",
+    "rag-specialist"
+  ],
+  "instructions": [
+    "Use sequential-thinking MCP for complex document analysis",
+    "Chunk documents appropriately (500-1000 tokens)",
+    "Consider vector databases for large document sets",
+    "Implement proper error handling for malformed documents",
+    "Use streaming for large file processing"
+  ],
+  "keywords": [
+    "document",
+    "pdf",
+    "rag",
+    "retrieval",
+    "search",
+    "embeddings",
+    "vector database",
+    "text analysis"
+  ],
+  "tech_stack": {
+    "vector_db": "Pinecone, Weaviate, or ChromaDB",
+    "embeddings": "OpenAI, Cohere, or local models",
+    "file_types": "PDF, DOCX, TXT, MD"
+  }
+}

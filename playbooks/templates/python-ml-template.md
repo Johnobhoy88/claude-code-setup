@@ -1,0 +1,219 @@
+# {{PROJECT_NAME}} - Python ML Project
+
+**Auto-configured by Highland AI**
+
+## Project Overview
+- **Type:** Machine Learning / AI Project
+- **Language:** Python 3.11+
+- **Framework:** {{ML_FRAMEWORK}}
+- **Integrations:** {{INTEGRATIONS}}
+- **Created:** {{DATE}}
+
+## Tech Stack
+- **Language:** Python 3.11+
+- **ML Frameworks:** PyTorch / TensorFlow / Scikit-learn
+- **Environment:** Conda / venv
+- **Experiment Tracking:** MLflow / Weights & Biases
+- **Compute:** {{COMPUTE}}
+- **AI:** Claude Code with MCP integrations
+
+## Available MCPs
+{{MCP_LIST}}
+
+## Skills Configured
+{{SKILLS_LIST}}
+
+## Environment Setup
+```bash
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Install development dependencies
+pip install -r requirements-dev.txt
+```
+
+## Project Structure
+```
+data/
+├── raw/             # Original datasets
+├── processed/       # Cleaned and preprocessed data
+└── external/        # External data sources
+
+models/
+├── checkpoints/     # Model checkpoints
+├── trained/         # Final trained models
+└── experiments/     # Experiment logs
+
+notebooks/           # Jupyter notebooks
+src/
+├── data/            # Data processing scripts
+├── models/          # Model definitions
+├── training/        # Training scripts
+└── inference/       # Inference scripts
+
+tests/               # Unit tests
+```
+
+## Development Commands
+```bash
+# Training
+python src/training/train.py --config configs/default.yaml
+
+# Evaluation
+python src/training/evaluate.py --model models/trained/model.pt
+
+# Inference
+python src/inference/predict.py --input data/test.csv
+
+# Run tests
+pytest tests/
+```
+
+## Coding Preferences
+- **Type Hints:** Use for all function signatures
+- **Docstrings:** Google or NumPy style
+- **Code Style:** Black formatter + isort
+- **Linting:** Pylint + flake8
+- **Testing:** pytest with coverage
+
+## Common Workflows
+
+### Starting a New Experiment
+```bash
+# Create experiment config
+cp configs/default.yaml configs/experiment_001.yaml
+
+# Edit config and run training
+python src/training/train.py --config configs/experiment_001.yaml
+```
+
+### GPU Memory Optimization
+```python
+# Use gradient checkpointing
+model.gradient_checkpointing_enable()
+
+# Mixed precision training
+from torch.amp import autocast, GradScaler
+scaler = GradScaler()
+
+# Clear cache periodically
+torch.cuda.empty_cache()
+```
+
+### Tracking Experiments
+```python
+# MLflow example
+import mlflow
+
+with mlflow.start_run():
+    mlflow.log_params(config)
+    mlflow.log_metrics({"loss": loss, "accuracy": acc})
+    mlflow.pytorch.log_model(model, "model")
+```
+
+## AI Assistant Instructions
+
+When working on this project:
+1. **Data Processing:** Always validate data shape and types
+2. **Model Training:** Monitor GPU memory usage
+3. **Hyperparameters:** Use config files, not hardcoded values
+4. **Experiments:** Log everything (metrics, configs, artifacts)
+5. **Reproducibility:** Set random seeds, version control data
+6. **Documentation:** Document model architecture and training process
+
+## Best Practices
+
+### DO
+- ✅ Use virtual environments
+- ✅ Version control your code (not data/models)
+- ✅ Track experiments systematically
+- ✅ Monitor GPU memory and utilization
+- ✅ Validate data at every step
+- ✅ Use type hints and docstrings
+- ✅ Write unit tests for critical functions
+
+### DON'T
+- ❌ Hardcode paths or hyperparameters
+- ❌ Commit large model files to git
+- ❌ Skip data validation
+- ❌ Ignore memory leaks
+- ❌ Train without logging
+- ❌ Use global random seeds without documenting
+
+## GPU Setup
+
+### CUDA Requirements
+```bash
+# Check CUDA version
+nvidia-smi
+
+# Install PyTorch with CUDA
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+```
+
+### Memory Optimization Tips
+- Use gradient accumulation for larger batch sizes
+- Enable gradient checkpointing
+- Use mixed precision (FP16/BF16)
+- Clear cache between epochs
+- Monitor with `nvidia-smi` or `torch.cuda.memory_summary()`
+
+## Integrations Setup
+
+{{INTEGRATION_SETUP_INSTRUCTIONS}}
+
+## Deployment
+
+### Model Serving
+```python
+# FastAPI example
+from fastapi import FastAPI
+import torch
+
+app = FastAPI()
+model = torch.load("models/trained/model.pt")
+
+@app.post("/predict")
+def predict(data: dict):
+    # Inference code
+    return predictions
+```
+
+### Docker Deployment
+```dockerfile
+FROM pytorch/pytorch:2.1.0-cuda12.1-cudnn8-runtime
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+CMD ["python", "src/training/train.py"]
+```
+
+## Troubleshooting
+
+### CUDA Out of Memory
+```python
+# Reduce batch size
+# Enable gradient checkpointing
+# Use gradient accumulation
+# Clear cache: torch.cuda.empty_cache()
+```
+
+### Slow Training
+```python
+# Profile code
+from torch.profiler import profile, ProfilerActivity
+with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA]) as prof:
+    # Training code
+print(prof.key_averages().table())
+```
+
+---
+
+**Generated by:** Highland AI Claude Setup Tool
+**Documentation:** https://highlandai.com/products/claude-setup/docs
+**Support:** support@highlandai.com

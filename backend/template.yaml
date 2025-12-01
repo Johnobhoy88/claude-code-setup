@@ -1,0 +1,180 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Highland AI - Claude Code Setup Tool Backend
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: nodejs20.x
+    Architectures:
+      - x86_64
+    Environment:
+      Variables:
+        ANTHROPIC_API_KEY: !Ref AnthropicApiKey
+        SUPABASE_URL: !Ref SupabaseUrl
+        SUPABASE_SERVICE_KEY: !Ref SupabaseServiceKey
+        JWT_SECRET: !Ref JwtSecret
+        PLAYBOOKS_BUCKET: !Ref PlaybooksBucket
+        TEMPLATES_BUCKET: !Ref TemplatesBucket
+
+Parameters:
+  AnthropicApiKey:
+    Type: String
+    Description: Anthropic API Key
+    NoEcho: true
+
+  SupabaseUrl:
+    Type: String
+    Description: Supabase Project URL
+
+  SupabaseServiceKey:
+    Type: String
+    Description: Supabase Service Role Key
+    NoEcho: true
+
+  JwtSecret:
+    Type: String
+    Description: JWT Secret for token generation
+    NoEcho: true
+
+Resources:
+  # API Gateway
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Cors:
+        AllowMethods: "'POST, GET, OPTIONS'"
+        AllowHeaders: "'Content-Type, Authorization'"
+        AllowOrigin: "'https://highlandai.com'"
+
+  # S3 Buckets
+  PlaybooksBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: highland-ai-playbooks
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  TemplatesBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: highland-ai-templates
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # Lambda Functions
+  ValidateTokenFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/validate-token/
+      Handler: index.handler
+      Description: Validate and consume install tokens
+      Events:
+        ValidateToken:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /validate-token
+            Method: post
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: '*'
+
+  AnalyzeProjectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/analyze-project/
+      Handler: index.handler
+      Description: AI-powered project analysis
+      Timeout: 60
+      MemorySize: 1024
+      Events:
+        AnalyzeProject:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /analyze
+            Method: post
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref PlaybooksBucket
+        - S3ReadPolicy:
+            BucketName: !Ref TemplatesBucket
+        - Statement:
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: '*'
+
+  GenerateTokenFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/generate-token/
+      Handler: index.handler
+      Description: Generate new install tokens (monthly subscribers only)
+      Events:
+        GenerateToken:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /generate-token
+            Method: post
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: '*'
+
+  # CloudWatch Log Groups
+  ValidateTokenLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${ValidateTokenFunction}
+      RetentionInDays: 30
+
+  AnalyzeProjectLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${AnalyzeProjectFunction}
+      RetentionInDays: 30
+
+  GenerateTokenLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GenerateTokenFunction}
+      RetentionInDays: 30
+
+Outputs:
+  ApiUrl:
+    Description: API Gateway endpoint URL
+    Value: !Sub 'https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/prod/'
+
+  PlaybooksBucketName:
+    Description: S3 bucket for playbooks
+    Value: !Ref PlaybooksBucket
+
+  TemplatesBucketName:
+    Description: S3 bucket for templates
+    Value: !Ref TemplatesBucket

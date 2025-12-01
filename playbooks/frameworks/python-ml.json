@@ -1,0 +1,44 @@
+{
+  "name": "Python ML/AI",
+  "description": "Python machine learning and AI projects",
+  "required_mcps": [
+    "@modelcontextprotocol/server-filesystem",
+    "@modelcontextprotocol/server-memory",
+    "sequential-thinking-mcp"
+  ],
+  "optional_mcps": [
+    "ollama-mcp",
+    "@huggingface/mcp-server",
+    "mlflow-mcp"
+  ],
+  "skills": [
+    "ml-engineer",
+    "data-science",
+    "gpu-optimizer"
+  ],
+  "claude_md_template": "python-ml-template.md",
+  "instructions": [
+    "Use virtual environments (venv or conda)",
+    "Track experiments with MLflow or Weights & Biases",
+    "GPU memory optimization is critical",
+    "Use type hints for better code quality",
+    "Document model architectures clearly",
+    "Version control datasets and model weights"
+  ],
+  "keywords": [
+    "python",
+    "machine learning",
+    "ml",
+    "ai",
+    "pytorch",
+    "tensorflow",
+    "deep learning",
+    "neural networks"
+  ],
+  "tech_stack": {
+    "language": "Python 3.11+",
+    "frameworks": "PyTorch / TensorFlow",
+    "tools": "Jupyter, MLflow",
+    "compute": "GPU (CUDA)"
+  }
+}

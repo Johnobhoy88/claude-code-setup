@@ -1,0 +1,34 @@
+{
+  "name": "@highland-ai/claude-setup-frontend",
+  "version": "1.0.0",
+  "description": "Highland AI - Claude Setup Frontend Integration",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "^14.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@supabase/supabase-js": "^2.38.4",
+    "stripe": "^14.8.0",
+    "@stripe/stripe-js": "^2.2.2",
+    "resend": "^3.0.0",
+    "zod": "^3.22.4",
+    "tailwindcss": "^3.3.6",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "typescript": "^5.3.3",
+    "eslint": "^8.55.0",
+    "eslint-config-next": "^14.0.4"
+  }
+}
