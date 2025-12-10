@@ -1,0 +1,78 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-12-09",
+  "skills": [
+    {
+      "name": "typescript",
+      "description": "TypeScript development with strict type checking",
+      "keywords": ["typescript", "ts", "types", "strict"],
+      "config": {
+        "strictMode": true,
+        "preferInterfaces": true
+      }
+    },
+    {
+      "name": "react",
+      "description": "React development with modern patterns",
+      "keywords": ["react", "jsx", "hooks", "components"],
+      "config": {
+        "preferFunctionalComponents": true,
+        "useHooks": true
+      }
+    },
+    {
+      "name": "nextjs",
+      "description": "Next.js App Router development",
+      "keywords": ["nextjs", "next", "app router", "server components"],
+      "config": {
+        "appRouter": true,
+        "serverComponents": true
+      }
+    },
+    {
+      "name": "python",
+      "description": "Python development with type hints",
+      "keywords": ["python", "py", "typing"],
+      "config": {
+        "useTypeHints": true,
+        "preferDataclasses": true
+      }
+    },
+    {
+      "name": "testing",
+      "description": "Test-driven development practices",
+      "keywords": ["test", "tdd", "jest", "pytest", "vitest"],
+      "config": {
+        "preferUnitTests": true,
+        "coverageTarget": 80
+      }
+    },
+    {
+      "name": "api-design",
+      "description": "RESTful API design best practices",
+      "keywords": ["api", "rest", "endpoints", "http"],
+      "config": {
+        "preferREST": true,
+        "useOpenAPI": true
+      }
+    },
+    {
+      "name": "database",
+      "description": "Database design and query optimization",
+      "keywords": ["database", "sql", "postgres", "mysql", "sqlite"],
+      "config": {
+        "preferNormalization": true,
+        "useIndexes": true
+      }
+    },
+    {
+      "name": "security",
+      "description": "Security-focused development",
+      "keywords": ["security", "auth", "encryption", "validation"],
+      "config": {
+        "inputValidation": true,
+        "sanitizeOutput": true
+      }
+    }
+  ]
+}

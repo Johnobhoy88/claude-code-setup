@@ -1,0 +1,36 @@
+{
+  "name": "Django",
+  "description": "Django web framework with ORM, migrations, and observability.",
+  "mcps": [
+    {
+      "name": "filesystem",
+      "required": true,
+      "reason": "Edit models, views, settings, and templates"
+    },
+    {
+      "name": "memory",
+      "required": true,
+      "reason": "Persist project conventions and decisions"
+    },
+    {
+      "name": "github",
+      "required": false,
+      "reason": "PR review and repo navigation"
+    },
+    {
+      "name": "postgres",
+      "required": false,
+      "reason": "Production-grade relational DB support"
+    },
+    {
+      "name": "sentry",
+      "required": false,
+      "reason": "Error tracking and release health"
+    }
+  ],
+  "skills": ["orm-optimization", "logging", "error-observability"],
+  "claudeMdTemplate": "django",
+  "envVars": ["DJANGO_SETTINGS_MODULE", "DATABASE_URL", "SENTRY_DSN"],
+  "buildCommand": "python manage.py check --deploy",
+  "testCommand": "pytest"
+}

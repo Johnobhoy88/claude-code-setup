@@ -1,0 +1,147 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-12-09",
+  "mcps": [
+    {
+      "name": "context7",
+      "package": "@upstash/context7-mcp",
+      "description": "Enhanced context management with up-to-date library documentation",
+      "category": "essential",
+      "requiredEnvVars": [],
+      "requiresOAuth": false,
+      "priority": "essential",
+      "useCases": ["documentation lookup", "library reference", "API exploration"],
+      "docFile": "context7.md"
+    },
+    {
+      "name": "memory",
+      "package": "@modelcontextprotocol/server-memory",
+      "description": "Persistent memory across Claude Code sessions using knowledge graph",
+      "category": "essential",
+      "requiredEnvVars": [],
+      "requiresOAuth": false,
+      "priority": "essential",
+      "useCases": ["session persistence", "context retention", "project memory"],
+      "docFile": "memory.md"
+    },
+    {
+      "name": "filesystem",
+      "package": "@modelcontextprotocol/server-filesystem",
+      "description": "Secure file system access for reading and writing project files",
+      "category": "essential",
+      "requiredEnvVars": [],
+      "requiresOAuth": false,
+      "priority": "essential",
+      "useCases": ["file operations", "project navigation", "code editing"],
+      "docFile": "filesystem.md"
+    },
+    {
+      "name": "puppeteer",
+      "package": "@anthropic/puppeteer-mcp",
+      "description": "Browser automation and web scraping capabilities",
+      "category": "development",
+      "requiredEnvVars": [],
+      "requiresOAuth": false,
+      "priority": "recommended",
+      "useCases": ["web scraping", "browser testing", "screenshot capture"],
+      "docFile": "puppeteer.md"
+    },
+    {
+      "name": "github",
+      "package": "@modelcontextprotocol/server-github",
+      "description": "GitHub integration for repository management and code review",
+      "category": "integration",
+      "requiredEnvVars": ["GITHUB_TOKEN"],
+      "requiresOAuth": false,
+      "priority": "recommended",
+      "useCases": ["repository management", "PR review", "issue tracking"],
+      "docFile": "github.md"
+    },
+    {
+      "name": "postgres",
+      "package": "@modelcontextprotocol/server-postgres",
+      "description": "PostgreSQL database access for queries and schema management",
+      "category": "database",
+      "requiredEnvVars": ["DATABASE_URL"],
+      "requiresOAuth": false,
+      "priority": "optional",
+      "useCases": ["database queries", "schema design", "data analysis"],
+      "docFile": "postgres.md"
+    },
+    {
+      "name": "sqlite",
+      "package": "@modelcontextprotocol/server-sqlite",
+      "description": "SQLite database access for local database operations",
+      "category": "database",
+      "requiredEnvVars": [],
+      "requiresOAuth": false,
+      "priority": "optional",
+      "useCases": ["local database", "prototyping", "embedded data"],
+      "docFile": "sqlite.md"
+    },
+    {
+      "name": "slack",
+      "package": "@modelcontextprotocol/server-slack",
+      "description": "Slack integration for messaging and channel management",
+      "category": "integration",
+      "requiredEnvVars": ["SLACK_BOT_TOKEN"],
+      "requiresOAuth": true,
+      "priority": "optional",
+      "useCases": ["team communication", "notifications", "channel management"],
+      "docFile": "slack.md"
+    },
+    {
+      "name": "fetch",
+      "package": "@modelcontextprotocol/server-fetch",
+      "description": "HTTP fetch capabilities for API calls and web requests",
+      "category": "utility",
+      "requiredEnvVars": [],
+      "requiresOAuth": false,
+      "priority": "recommended",
+      "useCases": ["API calls", "web requests", "data fetching"],
+      "docFile": "fetch.md"
+    },
+    {
+      "name": "brave-search",
+      "package": "@anthropic/brave-search-mcp",
+      "description": "Web search using Brave Search API",
+      "category": "utility",
+      "requiredEnvVars": ["BRAVE_API_KEY"],
+      "requiresOAuth": false,
+      "priority": "optional",
+      "useCases": ["web search", "research", "information lookup"],
+      "docFile": "brave-search.md"
+    },
+    {
+      "name": "sequential-thinking",
+      "package": "@anthropic/sequential-thinking-mcp",
+      "description": "Enhanced reasoning through step-by-step thinking",
+      "category": "reasoning",
+      "requiredEnvVars": [],
+      "requiresOAuth": false,
+      "priority": "recommended",
+      "useCases": ["complex problems", "debugging", "architecture decisions"],
+      "docFile": "sequential-thinking.md"
+    },
+    {
+      "name": "sentry",
+      "package": "@sentry/mcp-server",
+      "description": "Sentry error tracking integration",
+      "category": "monitoring",
+      "requiredEnvVars": ["SENTRY_AUTH_TOKEN"],
+      "requiresOAuth": false,
+      "priority": "optional",
+      "useCases": ["error tracking", "debugging", "monitoring"],
+      "docFile": "sentry.md"
+    }
+  ],
+  "categories": {
+    "essential": "Core MCPs that every project should have",
+    "development": "Tools for development workflow",
+    "integration": "Third-party service integrations",
+    "database": "Database connectivity",
+    "utility": "General purpose utilities",
+    "reasoning": "Enhanced AI reasoning capabilities",
+    "monitoring": "Application monitoring and debugging"
+  }
+}

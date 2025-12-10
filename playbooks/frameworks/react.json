@@ -1,0 +1,31 @@
+{
+  "name": "React",
+  "description": "React SPA setup with solid local tooling and browser debugging.",
+  "mcps": [
+    {
+      "name": "filesystem",
+      "required": true,
+      "reason": "Read/write project files and components"
+    },
+    {
+      "name": "memory",
+      "required": true,
+      "reason": "Persist decisions and context across sessions"
+    },
+    {
+      "name": "github",
+      "required": false,
+      "reason": "Repo navigation, PR reviews, and history lookup"
+    },
+    {
+      "name": "puppeteer",
+      "required": false,
+      "reason": "UI testing and screenshot-based debugging"
+    }
+  ],
+  "skills": ["component-testing", "frontend-debugging", "bundle-analysis"],
+  "claudeMdTemplate": "react",
+  "envVars": ["NODE_ENV", "PUBLIC_URL"],
+  "buildCommand": "npm run build",
+  "testCommand": "npm test"
+}

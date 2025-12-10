@@ -9,8 +9,11 @@
   "type": "module",
   "scripts": {
     "dev": "node src/index.js",
-    "build": "esbuild src/index.js --bundle --platform=node --target=node18 --outfile=dist/index.js --format=esm",
-    "test": "node --test",
+    "build": "esbuild src/index.js --bundle --platform=node --target=node18 --outfile=dist/index.js --format=esm --external:inquirer --external:chalk --external:ora --external:execa --external:node-fetch --external:commander --external:conf",
+    "test": "node --test src/__tests__/*.test.js",
+    "test:property": "node --test src/__tests__/*.property.test.js",
+    "test:all": "node --test src/__tests__/*.js",
+    "test:file": "node --test src/__tests__/*.js > test-results.txt 2>&1 || echo Done",
     "lint": "eslint src/",
     "prepublishOnly": "npm run build"
   },
@@ -26,9 +29,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/highlandai/claude-code-setup"
+    "url": "https://github.com/Johnobhoy88/claude-code-setup"
   },
-  "homepage": "https://highlandai.com/products/claude-setup",
+  "homepage": "https://highlandai.com",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "engines": {
     "node": ">=18.0.0"
   },
@@ -43,6 +50,7 @@
   },
   "devDependencies": {
     "esbuild": "^0.19.8",
-    "eslint": "^8.55.0"
+    "eslint": "^8.55.0",
+    "fast-check": "^3.14.0"
   }
 }

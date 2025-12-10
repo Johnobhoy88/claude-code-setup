@@ -1,0 +1,36 @@
+{
+  "name": "FastAPI",
+  "description": "FastAPI backend with typed endpoints and DB integration.",
+  "mcps": [
+    {
+      "name": "filesystem",
+      "required": true,
+      "reason": "Edit app code, routers, and settings"
+    },
+    {
+      "name": "memory",
+      "required": true,
+      "reason": "Keep design decisions and context"
+    },
+    {
+      "name": "github",
+      "required": false,
+      "reason": "Review PRs and browse history"
+    },
+    {
+      "name": "postgres",
+      "required": false,
+      "reason": "Relational DB access for prod workloads"
+    },
+    {
+      "name": "fetch",
+      "required": false,
+      "reason": "Call external/internal APIs and verify responses"
+    }
+  ],
+  "skills": ["api-design", "typing", "sql-tuning"],
+  "claudeMdTemplate": "fastapi",
+  "envVars": ["PYTHONPATH", "DATABASE_URL"],
+  "buildCommand": "python -m compileall .",
+  "testCommand": "pytest"
+}

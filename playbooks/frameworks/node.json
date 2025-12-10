@@ -1,0 +1,36 @@
+{
+  "name": "Node.js",
+  "description": "Node.js/Express backend setup with DB access and API tooling.",
+  "mcps": [
+    {
+      "name": "filesystem",
+      "required": true,
+      "reason": "Edit server code, routes, and configs"
+    },
+    {
+      "name": "memory",
+      "required": true,
+      "reason": "Track architecture decisions and shared context"
+    },
+    {
+      "name": "github",
+      "required": false,
+      "reason": "Review PRs and browse repo history"
+    },
+    {
+      "name": "postgres",
+      "required": false,
+      "reason": "Work with relational data in Postgres"
+    },
+    {
+      "name": "sqlite",
+      "required": false,
+      "reason": "Lightweight local DB for dev/testing"
+    }
+  ],
+  "skills": ["api-design", "logging", "sql-tuning"],
+  "claudeMdTemplate": "node",
+  "envVars": ["NODE_ENV", "PORT", "DATABASE_URL"],
+  "buildCommand": "npm run build",
+  "testCommand": "npm test"
+}
