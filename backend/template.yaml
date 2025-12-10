@@ -15,8 +15,19 @@ Globals:
         SUPABASE_URL: !Ref SupabaseUrl
         SUPABASE_SERVICE_KEY: !Ref SupabaseServiceKey
         JWT_SECRET: !Ref JwtSecret
-        PLAYBOOKS_BUCKET: !Ref PlaybooksBucket
-        TEMPLATES_BUCKET: !Ref TemplatesBucket
+        PLAYBOOKS_BUCKET: highland-ai-playbooks
+        TEMPLATES_BUCKET: highland-ai-templates
+        STRIPE_SECRET_KEY: !Ref StripeSecretKey
+        STRIPE_WEBHOOK_SECRET: !Ref StripeWebhookSecret
+        FRONTEND_URL: !Ref FrontendUrl
+        DATABASE_URL: !Ref DatabaseUrl
+        DB_HOST: !Ref DatabaseHost
+        DB_PORT: !Ref DatabasePort
+        DB_USER: !Ref DatabaseUser
+        DB_PASSWORD: !Ref DatabasePassword
+        DB_NAME: !Ref DatabaseName
+        STRIPE_SECRET_ARN: !Ref StripeSecretArn
+        TOKENS_TABLE: highlandai_tokens
 
 Parameters:
   AnthropicApiKey:
@@ -38,7 +49,74 @@ Parameters:
     Description: JWT Secret for token generation
     NoEcho: true
 
+  StripeSecretKey:
+    Type: String
+    Description: Stripe Secret Key
+    NoEcho: true
+    Default: ''
+
+  StripeWebhookSecret:
+    Type: String
+    Description: Stripe Webhook Signing Secret
+    NoEcho: true
+    Default: ''
+
+  FrontendUrl:
+    Type: String
+    Description: Frontend URL for redirects
+    Default: https://highlandai.com
+
+  StripeSecretArn:
+    Type: String
+    Description: Optional ARN of Secrets Manager secret containing Stripe keys (json with secret_key, publishable_key, webhook_secret)
+    Default: ''
+
+  DatabaseUrl:
+    Type: String
+    Description: Optional PostgreSQL connection string (overrides individual DB settings)
+    Default: ''
+
+  DatabaseHost:
+    Type: String
+    Description: Database host
+    Default: ''
+
+  DatabasePort:
+    Type: Number
+    Description: Database port
+    Default: 5432
+
+  DatabaseUser:
+    Type: String
+    Description: Database user
+    Default: postgres
+
+  DatabasePassword:
+    Type: String
+    Description: Database password
+    NoEcho: true
+
+  DatabaseName:
+    Type: String
+    Description: Database name
+    Default: highlandai
+
+Conditions:
+  HasStripeSecretArn: !Not [!Equals [!Ref StripeSecretArn, ""]]
+
 Resources:
+  TokensTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: highlandai_tokens
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: token
+          AttributeType: S
+      KeySchema:
+        - AttributeName: token
+          KeyType: HASH
+
   # API Gateway
   ApiGateway:
     Type: AWS::Serverless::Api
@@ -47,7 +125,7 @@ Resources:
       Cors:
         AllowMethods: "'POST, GET, OPTIONS'"
         AllowHeaders: "'Content-Type, Authorization'"
-        AllowOrigin: "'https://highlandai.com'"
+        AllowOrigin: "'*'"
 
   # S3 Buckets
   PlaybooksBucket:
@@ -78,8 +156,11 @@ Resources:
   ValidateTokenFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: highlandai-validate-token
       CodeUri: functions/validate-token/
       Handler: index.handler
+      Runtime: nodejs20.x
+      Timeout: 30
       Description: Validate and consume install tokens
       Events:
         ValidateToken:
@@ -125,11 +206,49 @@ Resources:
                 - logs:PutLogEvents
               Resource: '*'
 
+  CheckoutFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: highlandai-checkout
+      CodeUri: functions/checkout/
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Timeout: 30
+      Description: Create Stripe checkout sessions
+      Events:
+        Checkout:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /checkout
+            Method: post
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: '*'
+        - Statement:
+            - Effect: Allow
+              Action:
+                - secretsmanager:GetSecretValue
+              Resource: !Ref StripeSecretArn
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:PutItem
+              Resource: !GetAtt TokensTable.Arn
+
   GenerateTokenFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: highlandai-generate-token
       CodeUri: functions/generate-token/
       Handler: index.handler
+      Runtime: nodejs20.x
+      Timeout: 30
       Description: Generate new install tokens (monthly subscribers only)
       Events:
         GenerateToken:
@@ -147,24 +266,72 @@ Resources:
                 - logs:PutLogEvents
               Resource: '*'
 
-  # CloudWatch Log Groups
-  ValidateTokenLogGroup:
-    Type: AWS::Logs::LogGroup
+  StripeWebhookFunction:
+    Type: AWS::Serverless::Function
     Properties:
-      LogGroupName: !Sub /aws/lambda/${ValidateTokenFunction}
-      RetentionInDays: 30
+      FunctionName: highlandai-stripe-webhook
+      CodeUri: functions/stripe-webhook/
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Timeout: 30
+      Description: Handle Stripe webhook events for payment processing
+      Events:
+        StripeWebhook:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /webhook/stripe
+            Method: post
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: '*'
+        - Statement:
+            - Effect: Allow
+              Action:
+                - secretsmanager:GetSecretValue
+              Resource: !Ref StripeSecretArn
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+                - dynamodb:PutItem
+              Resource: !GetAtt TokensTable.Arn
 
-  AnalyzeProjectLogGroup:
-    Type: AWS::Logs::LogGroup
+  GetTokenFunction:
+    Type: AWS::Serverless::Function
     Properties:
-      LogGroupName: !Sub /aws/lambda/${AnalyzeProjectFunction}
-      RetentionInDays: 30
-
-  GenerateTokenLogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: !Sub /aws/lambda/${GenerateTokenFunction}
-      RetentionInDays: 30
+      FunctionName: highlandai-get-token
+      CodeUri: functions/get-token/
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Timeout: 30
+      Description: Fetch token by Stripe session ID
+      Events:
+        GetToken:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /token
+            Method: get
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: '*'
+        - Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:Scan
+                - dynamodb:Query
+              Resource: !GetAtt TokensTable.Arn
 
 Outputs:
   ApiUrl:
