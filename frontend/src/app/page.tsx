@@ -97,7 +97,7 @@ export default function HomePage() {
               },
               {
                 title: 'All Frameworks',
-                description: 'React, Vue, Node, Python, Go, Rust — we've got you covered.',
+                description: 'React, Vue, Node, Python, Go, Rust - we have got you covered.',
               },
             ].map((feature, i) => (
               <div
