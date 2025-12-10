@@ -1,31 +1,180 @@
-/* frontend/src/app/globals.css */
+/* Highland AI - Glass Design System */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@layer base {
+  :root {
+    /* Brand Colors */
+    --color-primary: #d4a574;
+    --color-primary-hover: #e0b585;
+    --color-primary-dim: rgba(212, 165, 116, 0.15);
+
+    /* Background */
+    --bg: #0f0f0f;
+    --bg-glass: rgba(255, 255, 255, 0.03);
+    --bg-glass-hover: rgba(255, 255, 255, 0.06);
+    --bg-glass-elevated: rgba(255, 255, 255, 0.05);
+
+    /* Borders */
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --border-glass-hover: rgba(255, 255, 255, 0.12);
+    --border-primary: rgba(212, 165, 116, 0.3);
+    --border-primary-hover: rgba(212, 165, 116, 0.5);
+
+    /* Text */
+    --text-primary: #f5f5f5;
+    --text-secondary: #a0a0a0;
+    --text-tertiary: #666666;
+
+    /* Semantic */
+    --success: #4ade80;
+    --error: #f87171;
+    --warning: #fbbf24;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Ambient gradient background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(212, 165, 116, 0.08), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 100%, rgba(212, 165, 116, 0.04), transparent);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: var(--color-primary-dim);
+    color: var(--text-primary);
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-glass);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--border-glass-hover);
+  }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-/* Custom styles */
 @layer components {
+  /* Glass Card */
+  .glass {
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-glass);
+  }
+
+  .glass-hover:hover {
+    background: var(--bg-glass-hover);
+    border-color: var(--border-glass-hover);
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center px-5 py-2.5 text-[0.9375rem] font-medium rounded-xl transition-all duration-250 cursor-pointer border-none;
+  }
+
   .btn-primary {
-    @apply bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors;
+    background: var(--color-primary);
+    color: var(--bg);
   }
-  
-  .btn-secondary {
-    @apply bg-white text-black border border-gray-300 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors;
+
+  .btn-primary:hover {
+    background: var(--color-primary-hover);
   }
+
+  .btn-glass {
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    color: var(--text-primary);
+  }
+
+  .btn-glass:hover {
+    background: var(--bg-glass-hover);
+    border-color: var(--border-glass-hover);
+  }
+
+  /* Form inputs */
+  .form-input {
+    @apply w-full px-4 py-3.5 rounded-xl text-[0.9375rem] transition-all duration-250;
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    color: var(--text-primary);
+    font-family: inherit;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: var(--bg-glass-elevated);
+  }
+
+  .form-input::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  select.form-input {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23666666'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 18px;
+    padding-right: 44px;
+  }
+}
+
+@layer utilities {
+  .text-primary { color: var(--text-primary); }
+  .text-secondary { color: var(--text-secondary); }
+  .text-tertiary { color: var(--text-tertiary); }
+  .text-accent { color: var(--color-primary); }
+  .bg-glass { background: var(--bg-glass); }
+  .border-glass { border-color: var(--border-glass); }
 }

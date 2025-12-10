@@ -1,4 +1,3 @@
-// frontend/src/app/success/page.tsx
 'use client'
 
 import Link from 'next/link'
@@ -13,7 +12,7 @@ function SuccessContent() {
   const [email, setEmail] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState<'token' | 'command' | null>(null)
 
   useEffect(() => {
     if (!sessionId) {
@@ -44,11 +43,11 @@ function SuccessContent() {
     fetchToken()
   }, [sessionId])
 
-  const copyToClipboard = async (text: string) => {
+  const copyToClipboard = async (text: string, type: 'token' | 'command') => {
     try {
       await navigator.clipboard.writeText(text)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      setCopied(type)
+      setTimeout(() => setCopied(null), 2000)
     } catch (err) {
       console.error('Failed to copy:', err)
     }
@@ -59,111 +58,119 @@ function SuccessContent() {
     : 'npx @highland-ai/claude-setup --token YOUR_TOKEN_HERE'
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-lg mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-xl shadow-sm p-8 text-center">
-          <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
-            <svg className="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-20">
+      <div className="max-w-[520px] w-full">
+        {/* Success Icon */}
+        <div className="flex justify-center mb-8">
+          <div className="w-20 h-20 glass rounded-full flex items-center justify-center">
+            <svg className="w-10 h-10 text-[var(--success)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
             </svg>
           </div>
+        </div>
 
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Purchase Successful!</h1>
-          <p className="text-gray-600 mb-6">
-            Thank you for your purchase{email ? ` (${email})` : ''}. Your Claude Code setup is ready.
-          </p>
+        {/* Title */}
+        <h1 className="text-4xl font-bold tracking-[-0.03em] text-center mb-3">
+          Payment successful
+        </h1>
+        <p className="text-[var(--text-secondary)] text-center text-lg mb-10">
+          {email ? `Confirmation sent to ${email}` : 'Your setup is ready'}
+        </p>
 
-          {loading ? (
-            <div className="bg-gray-50 p-6 rounded-lg mb-6">
-              <div className="animate-pulse flex flex-col items-center">
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                <div className="h-10 bg-gray-200 rounded w-full"></div>
-              </div>
-              <p className="text-sm text-gray-500 mt-2">Loading your token...</p>
+        {/* Token Section */}
+        {loading ? (
+          <div className="glass rounded-2xl p-8 mb-6">
+            <div className="animate-pulse space-y-4">
+              <div className="h-4 bg-[var(--bg-glass-elevated)] rounded w-1/3"></div>
+              <div className="h-12 bg-[var(--bg-glass-elevated)] rounded"></div>
             </div>
-          ) : error ? (
-            <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-6">
-              <p className="text-yellow-800 text-sm">
-                {error}
-              </p>
-              <p className="text-yellow-700 text-xs mt-2">
-                Your token has also been sent to your email.
-              </p>
-            </div>
-          ) : token ? (
-            <div className="bg-green-50 border border-green-200 p-4 rounded-lg mb-6">
-              <label className="block text-sm font-medium text-green-800 mb-2 text-left">
-                Your Setup Token:
-              </label>
-              <div className="flex items-center gap-2">
-                <code className="flex-1 bg-white border border-green-300 px-3 py-2 rounded text-sm font-mono text-gray-800 overflow-x-auto">
-                  {token}
-                </code>
-                <button
-                  onClick={() => copyToClipboard(token)}
-                  className="shrink-0 px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
-                >
-                  {copied ? 'Copied!' : 'Copy'}
-                </button>
-              </div>
-            </div>
-          ) : null}
-
-          <div className="bg-blue-50 p-4 rounded-lg mb-6">
-            <h3 className="font-medium text-blue-800 mb-3 text-left">Quick Setup:</h3>
-            <div className="relative">
-              <code className="block bg-gray-900 text-green-400 px-4 py-3 rounded-lg text-sm font-mono text-left overflow-x-auto">
-                {fullCommand}
-              </code>
-              <button
-                onClick={() => copyToClipboard(fullCommand)}
-                className="absolute top-2 right-2 px-2 py-1 bg-gray-700 text-gray-300 rounded text-xs hover:bg-gray-600"
-              >
-                Copy
-              </button>
-            </div>
-            <p className="text-xs text-blue-600 mt-2 text-left">
-              Run this command in your project directory to configure Claude Code.
+            <p className="text-[var(--text-tertiary)] text-sm mt-4 text-center">Loading your token...</p>
+          </div>
+        ) : error ? (
+          <div className="glass rounded-2xl p-6 mb-6 border-[var(--warning)]/30 bg-[var(--warning)]/5">
+            <p className="text-[var(--warning)] text-sm text-center mb-2">{error}</p>
+            <p className="text-[var(--text-tertiary)] text-xs text-center">
+              Your token has also been sent to your email.
             </p>
           </div>
-
-          <div className="bg-gray-50 p-4 rounded-lg mb-6 text-left">
-            <h3 className="font-medium text-gray-800 mb-2">What happens next:</h3>
-            <ol className="text-sm text-gray-600 list-decimal pl-5 space-y-1">
-              <li>Open your terminal in your project directory</li>
-              <li>Run the command above</li>
-              <li>The CLI will analyze your project and generate:</li>
-            </ol>
-            <ul className="text-sm text-gray-600 list-disc pl-8 mt-1 space-y-1">
-              <li><code className="bg-gray-200 px-1 rounded">CLAUDE.md</code> - Custom instructions for Claude</li>
-              <li><code className="bg-gray-200 px-1 rounded">.mcp.json</code> - MCP server configuration</li>
-              <li>Recommended extensions and settings</li>
-            </ul>
+        ) : token ? (
+          <div className="glass rounded-2xl p-8 mb-6">
+            <label className="block text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-widest mb-3">
+              Your setup token
+            </label>
+            <div className="flex items-center gap-3">
+              <code className="flex-1 bg-[var(--bg)] px-4 py-3 rounded-xl text-sm font-mono text-[var(--success)] overflow-x-auto border border-[var(--border-glass)]">
+                {token}
+              </code>
+              <button
+                onClick={() => copyToClipboard(token, 'token')}
+                className="btn btn-glass px-4 py-3"
+              >
+                {copied === 'token' ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
           </div>
+        ) : null}
 
-          <div className="space-y-3">
-            <Link
-              href="/"
-              className="block w-full py-3 px-4 bg-black text-white rounded-lg font-medium hover:bg-gray-800"
+        {/* Command Section */}
+        <div className="glass rounded-2xl p-8 mb-6">
+          <label className="block text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-widest mb-3">
+            Run this command
+          </label>
+          <div className="relative">
+            <code className="block bg-[var(--bg)] text-[var(--color-primary)] px-5 py-4 rounded-xl text-sm font-mono overflow-x-auto border border-[var(--border-glass)] pr-20">
+              {fullCommand}
+            </code>
+            <button
+              onClick={() => copyToClipboard(fullCommand, 'command')}
+              className="absolute top-1/2 right-3 -translate-y-1/2 glass px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-[var(--bg-glass-hover)] transition-colors"
             >
-              Back to Homepage
-            </Link>
-
-            <Link
-              href="/documentation"
-              className="block w-full py-3 px-4 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50"
-            >
-              View Documentation
-            </Link>
+              {copied === 'command' ? 'Copied!' : 'Copy'}
+            </button>
           </div>
-        </div>
-
-        <div className="mt-8 text-center">
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Need Help?</h3>
-          <p className="text-sm text-gray-600">
-            Visit our <Link href="/support" className="text-black underline">support page</Link> or contact us at support@highlandai.com
+          <p className="text-[var(--text-tertiary)] text-xs mt-3">
+            Open your terminal in your project directory and run this command.
           </p>
         </div>
+
+        {/* What's Next */}
+        <div className="glass rounded-2xl p-8 mb-8">
+          <h3 className="text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-widest mb-5">
+            What happens next
+          </h3>
+          <ol className="space-y-4">
+            {[
+              { step: '1', text: 'Open your terminal in your project directory' },
+              { step: '2', text: 'Run the command above' },
+              { step: '3', text: 'The CLI will generate your CLAUDE.md and .mcp.json files' },
+            ].map((item, i) => (
+              <li key={i} className="flex items-start gap-4">
+                <span className="w-7 h-7 glass rounded-full flex items-center justify-center text-xs font-semibold text-[var(--text-secondary)] shrink-0">
+                  {item.step}
+                </span>
+                <span className="text-[var(--text-secondary)] text-[0.9375rem] pt-0.5">{item.text}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        {/* Actions */}
+        <div className="space-y-3">
+          <Link href="/" className="btn btn-primary w-full py-4 text-base">
+            Back to homepage
+          </Link>
+          <Link href="/documentation" className="btn btn-glass w-full py-4 text-base">
+            View documentation
+          </Link>
+        </div>
+
+        {/* Help */}
+        <p className="text-[var(--text-tertiary)] text-sm text-center mt-8">
+          Need help? Contact us at{' '}
+          <a href="mailto:support@highlandai.com" className="text-[var(--color-primary)] hover:underline">
+            support@highlandai.com
+          </a>
+        </p>
       </div>
     </div>
   )
@@ -172,8 +179,8 @@ function SuccessContent() {
 export default function SuccessPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 py-12 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[var(--color-primary)] border-t-transparent rounded-full animate-spin"></div>
       </div>
     }>
       <SuccessContent />
